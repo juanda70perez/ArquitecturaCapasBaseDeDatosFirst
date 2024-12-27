@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Dal.Departamento>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreDepartamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodigoDepartamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPaisNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreDepartamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoDepartamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPaisNavigation.CodigoPais)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.IdDepartamento  }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IdDepartamento }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IdDepartamento })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

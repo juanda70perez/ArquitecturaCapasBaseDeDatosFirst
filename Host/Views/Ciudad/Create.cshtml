@@ -1,0 +1,86 @@
+﻿@model Dal.Ciudad
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h4>Ciudad</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Dropdown para seleccionar País -->
+            <div class="form-group">
+                <label asp-for="IdPais" class="control-label"></label>
+                <select asp-for="IdPais" class="form-control" asp-items="ViewBag.Idpais" id="IdPais" onchange="getDepartamentos();">
+                    <option value="">-- Seleccione un país --</option>
+                </select>
+            </div>
+
+            <!-- Dropdown para seleccionar Departamento -->
+            <div class="form-group" id="departamentoGroup">
+                <label asp-for="IdDepartamento" class="control-label"></label>
+                <select asp-for="IdDepartamento" class="form-control" asp-items="ViewBag.IdDepartamento" id="IdDepartamento">
+                    <option value="">-- Seleccione un departamento --</option>
+                </select>
+            </div>
+
+            <!-- Otros campos -->
+            <div class="form-group">
+                <label asp-for="NombreCiudad" class="control-label"></label>
+                <input asp-for="NombreCiudad" class="form-control" />
+                <span asp-validation-for="NombreCiudad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CodigoCiudad" class="control-label"></label>
+                <input asp-for="CodigoCiudad" class="form-control" />
+                <span asp-validation-for="CodigoCiudad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function getDepartamentos() {
+            var paisId = $('#IdPais').val();
+
+            // Realizar una solicitud AJAX para cargar los departamentos según el país seleccionado
+            if (paisId) {
+                $.ajax({
+                    url: '@Url.Action("GetDepartamentos", "Ciudad")', // Llama al endpoint del controlador
+                    type: 'GET',
+                    data: { idPais: paisId },
+                    success: function (data) {
+                        var departamentos = $('#IdDepartamento');
+                        departamentos.empty(); // Limpiar el select de departamentos
+                        departamentos.append('<option value="">-- Seleccione un departamento --</option>');
+
+                        data.forEach(function (depto) {
+                            departamentos.append('<option value="' + depto.id + '">' + depto.nombre + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert("Error al cargar los departamentos.");
+                    }
+                });
+            } else {
+                // Si no se selecciona un país, vaciar los departamentos
+                $('#IdDepartamento').empty();
+                $('#IdDepartamento').append('<option value="">-- Seleccione un departamento --</option>');
+            }
+        }
+    </script>
+}
